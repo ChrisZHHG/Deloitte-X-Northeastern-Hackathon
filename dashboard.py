@@ -62,6 +62,7 @@ if 'news_risk' not in merged_df.columns:
 else:
     merged_df['news_risk'] = merged_df['news_risk'].fillna(0)
 merged_df['financial_score'] = (merged_df['surplus'] / merged_df['revenue']).clip(0, 0.15) * 100
+
 # Add Streamlit sliders for alpha and beta weights
 alpha_weight = st.sidebar.slider("⚖️ Alpha (Financial) Weight", 0.0, 1.0, 0.6, 0.05)
 beta_weight = 1.0 - alpha_weight
@@ -77,7 +78,6 @@ with tabs[0]:
     st.header("📊 Stage 1: Original Data Overview")
     stage1_df = merged_df[['institution', 'year', 'revenue', 'expenses', 'surplus']]
     st.dataframe(stage1_df)
-
     st.download_button("⬇️ Download CSV", data=stage1_df.to_csv(index=False), file_name="stage1_original_data.csv")
 
 with tabs[1]:
@@ -89,8 +89,7 @@ with tabs[1]:
         st.markdown(f"### 🏫 {inst}")
         data = merged_df[merged_df['institution'] == inst].sort_values(by="year")
         data['Adjusted Revenue'] = data['revenue'] * (1 + change_pct / 100)
-
-                st.metric(label="Composite Health Score", value=f"{data.iloc[-1]['health_index']:.1f}%")
+        st.metric(label="Composite Health Score", value=f"{data.iloc[-1]['health_index']:.1f}%")
 
         fig1 = px.line(data, x="year", y=["revenue", "Adjusted Revenue"], title="Revenue vs Adjusted Revenue")
         st.plotly_chart(fig1, use_container_width=True)
@@ -107,10 +106,10 @@ with tabs[2]:
     st.header("🤖 Stage 3: AI Suggestions")
     ai_df = []
     for inst in selected_insts:
-                        row = merged_df[merged_df['institution'] == inst].iloc[-1]
+        row = merged_df[merged_df['institution'] == inst].iloc[-1]
         st.markdown(f"**{inst}** → Health Index: **{row['health_index']:.1f}%**, Status: {'🟢' if row['health_index'] > 85 else ('🟡' if row['health_index'] > 70 else ('🟠' if row['health_index'] >= 50 else '🔴'))}")
         st.markdown("- Health Index combines financial strength (α) and sentiment risk (β). Adjustable via sidebar.")
-        ai_df.append({"institution": inst, "score": row['adjusted_health_score']})
+        ai_df.append({"institution": inst, "score": row['health_index']})
 
     ai_df = pd.DataFrame(ai_df)
     st.download_button("⬇️ Download CSV", data=ai_df.to_csv(index=False), file_name="stage3_ai_suggestions.csv")
@@ -149,16 +148,17 @@ with tabs[4]:
     solution_df = []
     for inst in selected_insts:
         row = merged_df[merged_df['institution'] == inst].iloc[-1]
-                if row['health_index'] < 50:
+        if row['health_index'] < 50:
             st.markdown(f"### {inst}: 🔴 Critical")
             st.markdown("- 📉 *Consider cost control and alternative funding models.*")
-                elif row['health_index'] < 85:
+        elif row['health_index'] < 85:
             st.markdown(f"### {inst}: 🟡 Warning")
             st.markdown("- ⚠️ *Monitor enrollment and adjust spending plans.*")
-                else:
+        else:
             st.markdown(f"### {inst}: 🟢 Excellent")
-                st.markdown("- ✅ *Maintain current trajectory. Opportunities for strategic investment.*")
-                solution_df.append({"institution": inst, "score": row['health_index'], "status": ('Critical' if row['health_index'] < 50 else ('Warning' if row['health_index'] < 70 else ('Stable' if row['health_index'] < 85 else 'Excellent')) )})
+            st.markdown("- ✅ *Maintain current trajectory. Opportunities for strategic investment.*")
+
+        solution_df.append({"institution": inst, "score": row['health_index'], "status": ('Critical' if row['health_index'] < 50 else ('Warning' if row['health_index'] < 70 else ('Stable' if row['health_index'] < 85 else 'Excellent')) )})
 
     solution_df = pd.DataFrame(solution_df)
     st.download_button("⬇️ Download CSV", data=solution_df.to_csv(index=False), file_name="stage5_solutions.csv")
