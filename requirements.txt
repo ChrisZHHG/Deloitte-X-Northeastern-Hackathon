@@ -1,5 +1,7 @@
 streamlit
 pandas
-requests
+numpy
 plotly
-streamlit_echarts
+fpdf
+openpyxl
+eventregistry
