@@ -145,7 +145,7 @@ def assess_financial_impact(headline, institution_data):
 
 @st.cache_data
 def load_and_process_data():
-    data_path = os.path.join("/Users/chriszhang/Desktop/Deloitte Hackthon/data", "Summary.xlsx")
+    data_path = "Summary.xlsx"
     try:
         # Read Excel file with header at row 2
         df = pd.read_excel(data_path, header=1)
