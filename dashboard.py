@@ -1291,7 +1291,7 @@ def main():
                         pdf.multi_cell(0, 10, f"• {t}")
 
                     pdf.ln(10)
-                pdf_output = pdf.output(dest='S').encode('latin-1')
+                pdf_output = pdf.output(dest='S').encode('utf-8')
                 st.download_button(
                     "⬇️ Download Full Report",
                     pdf_output,
