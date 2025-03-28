@@ -727,12 +727,12 @@ def main():
                 )
                 fig.update_layout(
                     barmode='stack',
-                    height=400,  # 将图表高度设为 400（可自行调小或调大）
-                    yaxis=dict(range=[0, 100]),  # 强制 y 轴从 0 到 100
+                    height=400,
+                    yaxis=dict(range=[0, 100]),
                     margin=dict(l=50, r=50, t=60, b=50)
                 )    
                 fig.update_traces(
-                    texttemplate='%{value:.1f}%',  # 在图表中显示小数点后一位
+                    texttemplate='%{value:.1f}%',
                     textposition='inside'
                 )
                 st.plotly_chart(fig, use_container_width=True)
