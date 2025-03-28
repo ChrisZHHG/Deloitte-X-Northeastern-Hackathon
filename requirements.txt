@@ -5,3 +5,4 @@ plotly
 fpdf
 openpyxl
 eventregistry
+fpdf2==2.7.8
