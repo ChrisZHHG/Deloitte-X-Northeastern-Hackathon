@@ -763,7 +763,13 @@ def main():
                 "text/csv", 
                 key='download-csv'
             )
-
+            st.markdown("""
+            <hr>
+            <sub>
+            💡 <strong>Data Source:</strong> Canadian Association of University Business Officers (CAUBO) – "Financial Information of Universities and Colleges", 2001–2023 (as of Sep 2024).
+            </sub>
+            """, unsafe_allow_html=True)
+            
     # ---------------------------
     # Tab 2: News Risk Analysis
     # ---------------------------
